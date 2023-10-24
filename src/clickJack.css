@@ -1,0 +1,97 @@
+html, body, #app {
+    height: 100vh;
+    margin: 0;
+    background-color: lightskyblue;
+}
+
+.break-v {
+    flex-basis: 100%;
+    width: 0;
+}
+
+/* Home Page */
+#home-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: lightskyblue;
+    height: 100%;
+    font-family: "Verdana";
+    font-size: 6rem;
+}
+
+#header-line {
+    height: 20rem;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5rem;
+}
+
+#header-line #jack-card {
+    height: 13rem;
+    border-radius: 10%;
+}
+
+#home-menu {
+    height: 32rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#play-button {
+    background:transparent;
+    height: 7rem;
+}
+
+#settings-button {
+    background:transparent;
+    height: 7rem;
+    width: auto;
+    margin-top: 3rem;
+    filter: brightness(120%);
+}
+
+/* In Game Page */
+#game-board {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100vh;
+}
+#game-board #left-column {
+    width: 33%;
+}
+#game-board #center-column {
+    width: 33%;
+}
+#game-board #right-column {
+    width: 33%;
+}
+
+/* Scoreboard */
+#scoreboard {
+    width: 20vw;
+    border: .1rem black solid;
+    border-radius: 10%;
+    margin: 2rem;
+    padding: 1rem;
+}
+
+/* Deck Area */
+#deck-area {
+    /* width: 100vw; */
+    margin-top: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10rem;
+}
+
+#deck {
+    height: 16rem;
+    border-radius: 5%;
+}
