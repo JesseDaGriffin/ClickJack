@@ -91,7 +91,25 @@ html, body, #app {
     gap: 10rem;
 }
 
-#deck {
+.deck {
     height: 16rem;
     border-radius: 5%;
 }
+
+.flipped-card {
+    height: 16rem;
+    border-radius: 5%;
+    position: absolute;
+    top: 36.2rem;
+    transition: top 1s linear;
+}
+
+.move-img {
+    animation: slide-up 0.3s linear forwards;
+}
+
+@keyframes slide-up {
+    to {
+        top: 10rem;
+    }
+  }

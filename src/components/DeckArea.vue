@@ -1,24 +1,35 @@
 <template>
     <div id="deck-area">
         <div id="flipped-position">
-            <img id="deck" src="../assets/cardBack.png"/>
+            <img id="flipped-cards" class="deck" src="../assets/cardBack.png"/>
         </div>
         <div id="deck-position" @click="flipNextCard()">
-            <img id="deck" src="../assets/cardBack.png"/>
+            <img id="remaining-cards" class="deck" src="../assets/cardBack.png"/>
         </div>
     </div>
 </template>
 
 <script setup>
     import { ref, onMounted, computed, watch } from 'vue';
-    
+
     const deck = ref([]);
 
     const flipNextCard = () => {
-        console.log(deck.value);
         const randomIndex = Math.floor(Math.random() * deck.value.length);
         const randomCard = deck.value[randomIndex];
-        alert(randomCard);
+        deck.value.splice(randomIndex, 1)
+        // alert(randomCard);
+        // console.log(deck.value);
+        console.log(randomCard);
+
+        const newCard = document.getElementById("remaining-cards").cloneNode(true);
+        newCard.src = `../src/assets/cardFaces/${randomCard}.png`;
+        newCard.id = randomCard;
+        newCard.className = 'flipped-card';
+
+        document.getElementById("deck-area").appendChild(newCard);
+        
+        newCard.classList.add('move-img');
     }
 
     onMounted(() => {
