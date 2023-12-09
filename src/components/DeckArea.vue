@@ -18,18 +18,24 @@
         const randomIndex = Math.floor(Math.random() * deck.value.length);
         const randomCard = deck.value[randomIndex];
         deck.value.splice(randomIndex, 1)
-        // alert(randomCard);
-        // console.log(deck.value);
         console.log(randomCard);
 
-        const newCard = document.getElementById("remaining-cards").cloneNode(true);
-        newCard.src = `../src/assets/cardFaces/${randomCard}.png`;
+        const newCard = document.getElementById("remaining-cards").cloneNode();
+        newCard.src = '../src/assets/cardBack.png';
         newCard.id = randomCard;
         newCard.className = 'flipped-card';
-
+        
         document.getElementById("deck-area").appendChild(newCard);
         
+        
+        // Card flip speed
+        const speed = Math.floor(Math.random() * 300) + 50;
+        newCard.style["-webkit-animation-duration"] = `${speed / 500}s`;
+        console.log(speed);
         newCard.classList.add('move-img');
+        setTimeout(() => {
+            newCard.src = `../src/assets/cardFaces/${randomCard}.png`;
+        }, speed);
     }
 
     onMounted(() => {

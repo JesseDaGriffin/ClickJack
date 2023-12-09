@@ -94,22 +94,27 @@ html, body, #app {
 .deck {
     height: 16rem;
     border-radius: 5%;
+    border: 2px black solid;
 }
 
 .flipped-card {
     height: 16rem;
+    border: 2px black solid;
     border-radius: 5%;
     position: absolute;
     top: 36.2rem;
-    transition: top 1s linear;
+    transform-style: preserve-3d;
 }
 
 .move-img {
-    animation: slide-up 0.3s linear forwards;
+    animation: slide-up .4s linear forwards;
 }
 
 @keyframes slide-up {
-    to {
+    50% {
+        transform: rotateY(90deg);
+    }
+    100% {
         top: 10rem;
     }
-  }
+}
