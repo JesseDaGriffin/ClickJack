@@ -3,6 +3,11 @@ html, body, #app {
     margin: 0;
     background-color: lightskyblue;
 }
+body {
+    font-family: 'Orbitron', sans-serif;
+    /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, 'Noto Sans', sans-serif; */
+}
 
 .break-v {
     flex-basis: 100%;
@@ -17,7 +22,7 @@ html, body, #app {
     align-items: center;
     background-color: lightskyblue;
     height: 100%;
-    font-family: "Verdana";
+    /* font-family: "Verdana"; */
     font-size: 6rem;
 }
 
@@ -73,11 +78,44 @@ html, body, #app {
 
 /* Scoreboard */
 #scoreboard {
-    width: 20vw;
-    border: .1rem black solid;
-    border-radius: 10%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 18vw;
+    border: .3rem black solid;
+    border-radius: 30%;
     margin: 2rem;
     padding: 1rem;
+    background-color: burlywood;
+}
+
+#scoreboard #scoreboard-title {
+    width: 100%;
+    text-align: center;
+}
+
+#scoreboard #scoreboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 4fr;
+    column-gap: 3rem;
+    row-gap: 1rem;
+    margin-bottom: 3rem;
+}
+#scoreboard #scoreboard-grid div {
+    text-align: center;
+}
+
+#scoreboard #scoreboard-grid .score-count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 6rem;
+    width: 6rem;
+    background-color: black;
+    color: white;
+    border-radius: 30%;
+    font-size: 4rem;
 }
 
 /* Deck Area */
@@ -112,7 +150,8 @@ html, body, #app {
 
 @keyframes slide-up {
     50% {
-        transform: rotateY(90deg);
+        transform: rotateY(90deg) scale(1.5);
+        /* transform: scale(1.2); */
     }
     100% {
         top: 10rem;
