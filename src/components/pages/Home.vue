@@ -10,13 +10,20 @@
         </div>
         <div id="home-menu">
             <!-- <img id="play-button" src="../../assets/redPlayButton.png" /> -->
-            <router-link to="/inGame">
-                <img id="play-button" src="../../assets/redPlayButton.png" />
-            </router-link>
-            <img
-                id="settings-button"
-                src="../../assets/redSettingsButton.png"
-            />
+            <div class="router-button">
+                <router-link to="/inGame">
+                    <img id="play-button" src="../../assets/icons/icons8-play-64.png" />
+                </router-link>
+            </div>
+            
+            <div class="router-button">
+                <router-link to="/">
+                    <img
+                        id="settings-button"
+                        src="../../assets/icons/icons8-settings-64.png"
+                    />
+                </router-link>
+            </div>
         </div>
     </div>
 </template>
