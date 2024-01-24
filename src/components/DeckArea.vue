@@ -1,7 +1,7 @@
 <template>
     <div id="deck-area">
         <div id="flipped-position">
-            <img id="flipped-cards" class="deck" src="../assets/cardBack.png"/>
+            <!-- <img id="flipped-cards" class="deck" src="../assets/cardBack.png"/> -->
         </div>
         <div id="deck-position" @click="flipNextCard()">
             <img id="remaining-cards" class="deck" src="../assets/cardBack.png"/>
@@ -20,7 +20,6 @@ export default {
             const randomIndex = Math.floor(Math.random() * deck.value.length);
             const randomCard = deck.value[randomIndex];
             deck.value.splice(randomIndex, 1)
-            // console.log(randomCard);
 
             ctx.emit('set-last-card-flipped', randomCard);
 
@@ -31,15 +30,18 @@ export default {
             
             document.getElementById("deck-area").appendChild(newCard);
             
-            
             // Card flip speed
             const speed = Math.floor(Math.random() * 300) + 50;
             newCard.style["-webkit-animation-duration"] = `${speed / 500}s`;
-            // console.log(speed);
             newCard.classList.add('move-img');
             setTimeout(() => {
                 newCard.src = `../src/assets/cardFaces/${randomCard}.png`;
             }, speed);
+
+            // Remove card back if last card in deck
+            if (deck.value.length === 0) {
+                document.getElementById("remaining-cards").remove();
+            }
         }
 
         onMounted(() => {

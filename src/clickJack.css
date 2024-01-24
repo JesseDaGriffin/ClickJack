@@ -150,6 +150,10 @@ body {
     border: 2px black solid;
 }
 
+#flipped-position, #deck-position {
+    height: 16rem;
+}
+
 .flipped-card {
     height: 16rem;
     border: 2px black solid;
