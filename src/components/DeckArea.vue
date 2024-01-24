@@ -3,7 +3,7 @@
         <div id="flipped-position">
             <!-- <img id="flipped-cards" class="deck" src="../assets/cardBack.png"/> -->
         </div>
-        <div id="deck-position" @click="flipNextCard()">
+        <div id="deck-position" @click="startGame()">
             <img id="remaining-cards" class="deck" src="../assets/cardBack.png"/>
         </div>
     </div>
@@ -13,16 +13,52 @@
 import { ref, onMounted, computed, watch } from 'vue';
     
 export default {
+    props: {
+        continueGameLoop: Boolean,
+        gameStarted: Boolean,
+    },
+    emits: ['set-game-started', 'set-continue-game-loop', 'set-last-card-flipped'],
     setup(props, ctx) {
+        watch(() => props.continueGameLoop, (value) => {
+            if(value) {
+                flipNextCard();
+            }
+        });
+        const setContinueGameLoopChild = (value) => {
+            ctx.emit('set-continue-game-loop', value);
+        }
+
+        const setGameStartedChild = (value) => {
+            ctx.emit('set-game-started', value);
+        }
+
+        const setLastCardFlippedChild = (value) => {
+            ctx.emit('set-last-card-flipped', value);
+        }
+        
         const deck = ref([]);
 
+        const startGame = () => {
+            if(props.gameStarted === false) {
+                console.log('Game started!');
+                setGameStartedChild(true);
+                setContinueGameLoopChild(true);
+            }
+        }
+
         const flipNextCard = () => {
+            setContinueGameLoopChild(false);
+            // Get next card
             const randomIndex = Math.floor(Math.random() * deck.value.length);
             const randomCard = deck.value[randomIndex];
+
+            // Remove card from deck
             deck.value.splice(randomIndex, 1)
 
-            ctx.emit('set-last-card-flipped', randomCard);
+            // Set last card flipped
+            setLastCardFlippedChild(randomCard);
 
+            // Flip card
             const newCard = document.getElementById("remaining-cards").cloneNode();
             newCard.src = '../src/assets/cardBack.png';
             newCard.id = randomCard;
@@ -39,8 +75,18 @@ export default {
             }, speed);
 
             // Remove card back if last card in deck
-            if (deck.value.length === 0) {
+            if(deck.value.length === 0) {
                 document.getElementById("remaining-cards").remove();
+            }
+
+            // Stop game loop if card is a jack
+            if(randomCard.includes('jack')) {
+                // ctx.emit('set-continue-game-loop', false);
+                setContinueGameLoopChild(false);
+            } else {
+                setTimeout(() => {
+                    setContinueGameLoopChild(true);
+                }, 1000);
             }
         }
 
@@ -103,6 +149,7 @@ export default {
 
         return {
             deck,
+            startGame,
             flipNextCard,
         };
     }

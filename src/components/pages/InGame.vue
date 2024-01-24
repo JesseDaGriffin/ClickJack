@@ -5,7 +5,12 @@
         </div>
         <!-- <div class="break-v"></div> -->
         <div id="center-column">
-            <deck-area @set-last-card-flipped="setLastCardFlipped" />
+            <deck-area 
+                v-bind="gameState"
+                @set-game-started="setGameStarted" 
+                @set-continue-game-loop="setContinueGameLoop" 
+                @set-last-card-flipped="setLastCardFlipped" 
+            />
         </div>
         <div id="right-column">
             <!-- <score-board v-bind="score" /> -->
@@ -29,6 +34,11 @@ export default {
         const playerOneKey = 'ControlLeft';
         const playerTwoKey = 'ControlRight';
 
+        const gameState = ref({
+            gameStarted: false,
+            continueGameLoop: false
+        });
+
         const score = ref({
             player1: 0,
             player2: 0
@@ -38,34 +48,44 @@ export default {
 
         const lastPlayerClicked = ref('');
 
+        // Setters 
+        const setContinueGameLoop = (value) => {
+            gameState.value.continueGameLoop = value;
+            console.log('continueGameLoop: ', gameState.value.continueGameLoop);
+        }
+
+        const setGameStarted = (value) => {
+            gameState.value.gameStarted = value;
+            console.log('gameStarted: ', gameState.value.gameStarted);
+        }
+
         const setLastCardFlipped = (value) => {
-            console.log('setting last card flipped', value);
             lastCardFlipped.value = value;
+            console.log('lastCardFlipped: ', lastCardFlipped.value);
         }
 
         const handlePlayerInput = (value) => {
+            let playerScored = "";
             if(lastCardFlipped.value.includes('jack')) {
                 if(lastPlayerClicked.value === 'player1') {
+                    playerScored = "Player 1";
                     score.value.player1 = score.value.player1 + 1;
                 } else if(lastPlayerClicked.value === 'player2') {
+                    playerScored = "Player 2";
                     score.value.player2 = score.value.player2 + 1;
                 }
                 lastPlayerClicked.value = '';
                 lastCardFlipped.value = '';
+
+                alert(playerScored + " scored a point!")
+                setContinueGameLoop(true);
             } else {
                 lastPlayerClicked.value = '';
-                // alert('That was not a Jack!');
             }
         }
 
         onMounted(() => {
             window.addEventListener('keyup', (event) => {
-                // console.log(
-                //     event.code,
-                //     lastCardFlipped.value,
-                //     lastPlayerClicked.value,
-                // );
-
                 if (event.code === 'Space') {
                     alert('How to Play... Will be added later');
                 } else if (event.code === playerOneKey) {
@@ -82,8 +102,11 @@ export default {
         
         return {
             score,
+            gameState,
             lastPlayerClicked,
             setLastCardFlipped,
+            setContinueGameLoop,
+            setGameStarted,
         };
     },
 }
