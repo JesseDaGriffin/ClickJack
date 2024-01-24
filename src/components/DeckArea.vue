@@ -37,6 +37,7 @@ export default {
         }
         
         const deck = ref([]);
+        const numberOfDecks = 2;
 
         const startGame = () => {
             if(props.gameStarted === false) {
@@ -145,6 +146,12 @@ export default {
                 'queen_of_hearts2',
                 'queen_of_spades2'
             ];
+
+            // Add more decks
+            let deckCopy = deck.value.slice();
+            for(let i = 1; i < numberOfDecks; i++) {
+                deck.value = deck.value.concat(deckCopy);
+            }
         });
 
         return {
