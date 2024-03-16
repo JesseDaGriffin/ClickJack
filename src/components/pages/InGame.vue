@@ -18,7 +18,7 @@
             </div>
         </div>
         <div id="start-game-text" v-if="!gameState.gameStarted">
-            Click Screen and Press Space to Start
+            Press Space to Start
         </div>
     </div>
     <!-- <input type="button" @click="inc"/> -->

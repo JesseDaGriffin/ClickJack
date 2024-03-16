@@ -9,3 +9,4 @@ Game Features:
         ☐ Add controls to screen
         ☐ Add remaining cards in deck and remaining jack
         ☐ Add negative points for pressing button when not jack
+        ☐ Remove pop up when someone scores an replace with confetti (vue confetti)
