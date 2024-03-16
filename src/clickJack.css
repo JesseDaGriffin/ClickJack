@@ -24,7 +24,6 @@ body {
     background-color: lightskyblue;
     height: 100%;
     /* font-family: "Verdana"; */
-    font-size: 6rem;
 }
 #home-screen .included-text {
     font-size: 1rem;
@@ -40,6 +39,12 @@ body {
     gap: 5rem;
 }
 
+#header-line #game-title{
+    margin: 0 3rem 0 3rem;
+    font-size: 4rem;
+    animation: grow-shrink 1s linear forwards;
+    animation-iteration-count: infinite;
+}
 #header-line #jack-card {
     height: 13rem;
     border-radius: 10%;
@@ -72,8 +77,44 @@ body {
 #home-menu .router-button a {
     cursor: unset;
 }
+#home-menu .coming-soon {
+    position: absolute;
+    font-size: 2.1rem;
+    color: white;
+    rotate: 20deg;
+    margin: 1.2rem 0rem 0 -1rem;
+    text-align: center;
+    z-index: 2;
+    /* animation: grow-shrink 1s linear forwards;
+    animation-iteration-count: infinite; */
+}
+
+/* Effects */
+.dark-cover {
+    width: 8.5rem;
+    height: 8.5rem;
+    position: absolute;
+    z-index: 1;
+    background-color: #000;
+    background: rgba(0, 0, 0, 0.5);
+    margin: -0.7rem 0rem 0 -0.7rem;
+}
+
+.blur {
+    filter: blur(10px);
+}
+
 
 /* In Game Page */
+#start-game-text {
+    width: 80%;
+    text-align: center;
+    font-size: 6rem;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 #game-board {
     display: flex;
     flex-direction: row;
@@ -174,5 +215,24 @@ body {
     }
     100% {
         top: 10rem;
+    }
+}
+
+@keyframes grow-shrink {
+    25% {
+        /* font-size: 3rem; */
+        scale: 1.5;
+    }
+    50% {
+        /* font-size: 4rem; */
+        scale: 2;
+    }
+    75% {
+        /* font-size: 3rem; */
+        scale: 1.5;
+    }
+    100% {
+        /* font-size: 2rem; */
+        scale: 1;
     }
 }

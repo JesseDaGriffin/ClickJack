@@ -9,7 +9,6 @@
             <img id="jack-card" src="../../assets/jackCard.jpg" />
         </div>
         <div id="home-menu">
-            <!-- <img id="play-button" src="../../assets/redPlayButton.png" /> -->
             <div class="router-button">
                 <router-link to="/inGame">
                     <img id="play-button" src="../../assets/icons/icons8-play-64.png" />
@@ -17,6 +16,10 @@
             </div>
             
             <div class="router-button">
+                <div class="dark-cover"></div>
+                <div class="coming-soon">
+                    Coming <br> Soon
+                </div>
                 <router-link to="/">
                     <img
                         id="settings-button"

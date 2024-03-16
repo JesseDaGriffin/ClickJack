@@ -1,9 +1,7 @@
 <template>
     <div id="deck-area">
-        <div id="flipped-position">
-            <!-- <img id="flipped-cards" class="deck" src="../assets/cardBack.png"/> -->
-        </div>
-        <div id="deck-position" @click="startGame()">
+        <div id="flipped-position"></div>
+        <div id="deck-position">
             <img id="remaining-cards" class="deck" src="../assets/cardBack.png"/>
         </div>
     </div>
@@ -24,6 +22,13 @@ export default {
                 flipNextCard();
             }
         });
+
+        watch(() => props.gameStarted, (value) => {
+            console.log('gameStarted: ', value);
+            if(value) {
+                startGame();
+            }
+        });
         const setContinueGameLoopChild = (value) => {
             ctx.emit('set-continue-game-loop', value);
         }
@@ -40,11 +45,11 @@ export default {
         const numberOfDecks = 2;
 
         const startGame = () => {
-            if(props.gameStarted === false) {
-                console.log('Game started!');
-                setGameStartedChild(true);
-                setContinueGameLoopChild(true);
-            }
+            // if(props.gameStarted === false) {
+            //     console.log('Game started!');
+            //     // setGameStartedChild(true);
+            // }
+            setContinueGameLoopChild(true);
         }
 
         const flipNextCard = () => {
@@ -156,7 +161,6 @@ export default {
 
         return {
             deck,
-            startGame,
             flipNextCard,
         };
     }

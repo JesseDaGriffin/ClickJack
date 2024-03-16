@@ -1,0 +1,11 @@
+Game Features:
+    
+    Menu Items:
+        ✔ Put coming soon over settings @done(24-03-15 17:56)
+        ☐ Need to add view tutorial at the botton left corner of home screen
+
+    In Game:
+        ✔ Add starting text to start game with spacebar @done(24-03-15 18:55)
+        ☐ Add controls to screen
+        ☐ Add remaining cards in deck and remaining jack
+        ☐ Add negative points for pressing button when not jack

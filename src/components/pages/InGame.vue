@@ -1,19 +1,24 @@
 <template>
-    <div id="game-board" >
-        <div id="left-column">
-            <score-board v-bind="score" />
+    <div>
+        <div id="game-board" :class="{ blur: !gameState.gameStarted }" >
+            <div id="left-column">
+                <score-board v-bind="score" />
+            </div>
+            <!-- <div class="break-v"></div> -->
+            <div id="center-column">
+                <deck-area 
+                    v-bind="gameState"
+                    @set-game-started="setGameStarted" 
+                    @set-continue-game-loop="setContinueGameLoop" 
+                    @set-last-card-flipped="setLastCardFlipped" 
+                />
+            </div>
+            <div id="right-column">
+                <!-- <score-board v-bind="score" /> -->
+            </div>
         </div>
-        <!-- <div class="break-v"></div> -->
-        <div id="center-column">
-            <deck-area 
-                v-bind="gameState"
-                @set-game-started="setGameStarted" 
-                @set-continue-game-loop="setContinueGameLoop" 
-                @set-last-card-flipped="setLastCardFlipped" 
-            />
-        </div>
-        <div id="right-column">
-            <!-- <score-board v-bind="score" /> -->
+        <div id="start-game-text" v-if="!gameState.gameStarted">
+            Click Screen and Press Space to Start
         </div>
     </div>
     <!-- <input type="button" @click="inc"/> -->
@@ -64,6 +69,13 @@ export default {
             console.log('lastCardFlipped: ', lastCardFlipped.value);
         }
 
+        // Call Child Component Methods
+        const startGame = () => {
+            if(gameState.value.gameStarted === false) {
+                deckArea.value.startGame();
+            }
+        }
+
         const handlePlayerInput = (value) => {
             let playerScored = "";
             if(lastCardFlipped.value.includes('jack')) {
@@ -87,7 +99,11 @@ export default {
         onMounted(() => {
             window.addEventListener('keyup', (event) => {
                 if (event.code === 'Space') {
-                    alert('How to Play... Will be added later');
+                    // alert('How to Play... Will be added later');
+                    if (gameState.value.gameStarted === false) {
+                        setGameStarted(true);
+                        setContinueGameLoop(true);
+                    }
                 } else if (event.code === playerOneKey) {
                     lastPlayerClicked.value === '' ? lastPlayerClicked.value = 'player1' : '';
                 } else if (event.code === playerTwoKey) {
