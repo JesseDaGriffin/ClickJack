@@ -10,15 +10,14 @@
         <div id="scoreboard-grid">
             <div>Player 1</div>
             <div>Player 2</div>
-            <div class="score-count">{{props.player1}}</div>
-            <div class="score-count">{{props.player2}}</div>
+            <div class="score-count">{{ gameStore.score.player1 }}</div>
+            <div class="score-count">{{ gameStore.score.player2 }}</div>
         </div>
     </div>
 </template>
 
 <script setup>
-    const props = defineProps({
-        player1: Number,
-        player2: Number,
-    })
+    import { useGameStore} from '@/assets/stores/game'
+
+    const gameStore = useGameStore()
 </script>

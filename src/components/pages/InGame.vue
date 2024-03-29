@@ -1,14 +1,13 @@
 <template>
     <div>
-        <div id="game-board" :class="{ blur: !gameState.gameStarted }" >
+        <div id="game-board" :class="{ blur: !gameStore.gameState.gameStarted }" >
             <div id="left-column">
-                <score-board v-bind="score" />
+                <score-board />
             </div>
             <!-- <div class="break-v"></div> -->
             <div id="center-column">
                 <deck-area 
-                    v-bind="gameState"
-                    @set-game-started="setGameStarted" 
+                    v-bind="gameStore.gameState"
                     @set-continue-game-loop="setContinueGameLoop" 
                     @set-last-card-flipped="setLastCardFlipped" 
                 />
@@ -17,114 +16,50 @@
                 <!-- <score-board v-bind="score" /> -->
             </div>
         </div>
-        <div id="start-game-text" v-if="!gameState.gameStarted">
+        <div id="start-game-text" v-if="!gameStore.gameState.gameStarted">
             Press Space to Start
         </div>
     </div>
     <!-- <input type="button" @click="inc"/> -->
 </template>
 
-<script>
+<script setup>
 import ScoreBoard from '../ScoreBoard.vue';
 import DeckArea from '../DeckArea.vue';
 
+import { useGameStore } from '@/assets/stores/game';
+
 import { ref, onMounted, computed, watch } from 'vue';
+const gameStore = useGameStore()
 
-export default {
-    components: {
-        ScoreBoard,
-        DeckArea,
-    },
-    setup() {
-        const playerOneKey = 'ControlLeft';
-        const playerTwoKey = 'ControlRight';
-
-        const gameState = ref({
-            gameStarted: false,
-            continueGameLoop: false
-        });
-
-        const score = ref({
-            player1: 0,
-            player2: 0
-        });
-
-        const lastCardFlipped = ref('');
-
-        const lastPlayerClicked = ref('');
-
-        // Setters 
-        const setContinueGameLoop = (value) => {
-            gameState.value.continueGameLoop = value;
-            console.log('continueGameLoop: ', gameState.value.continueGameLoop);
-        }
-
-        const setGameStarted = (value) => {
-            gameState.value.gameStarted = value;
-            console.log('gameStarted: ', gameState.value.gameStarted);
-        }
-
-        const setLastCardFlipped = (value) => {
-            lastCardFlipped.value = value;
-            console.log('lastCardFlipped: ', lastCardFlipped.value);
-        }
-
-        // Call Child Component Methods
-        const startGame = () => {
-            if(gameState.value.gameStarted === false) {
-                deckArea.value.startGame();
-            }
-        }
-
-        const handlePlayerInput = (value) => {
-            let playerScored = "";
-            if(lastCardFlipped.value.includes('jack')) {
-                if(lastPlayerClicked.value === 'player1') {
-                    playerScored = "Player 1";
-                    score.value.player1 = score.value.player1 + 1;
-                } else if(lastPlayerClicked.value === 'player2') {
-                    playerScored = "Player 2";
-                    score.value.player2 = score.value.player2 + 1;
-                }
-                lastPlayerClicked.value = '';
-                lastCardFlipped.value = '';
-
-                alert(playerScored + " scored a point!")
-                setContinueGameLoop(true);
-            } else {
-                lastPlayerClicked.value = '';
-            }
-        }
-
-        onMounted(() => {
-            window.addEventListener('keyup', (event) => {
-                if (event.code === 'Space') {
-                    // alert('How to Play... Will be added later');
-                    if (gameState.value.gameStarted === false) {
-                        setGameStarted(true);
-                        setContinueGameLoop(true);
-                    }
-                } else if (event.code === playerOneKey) {
-                    lastPlayerClicked.value === '' ? lastPlayerClicked.value = 'player1' : '';
-                } else if (event.code === playerTwoKey) {
-                    lastPlayerClicked.value === '' ? lastPlayerClicked.value = 'player2' : '';
-                }
-
-                if(lastPlayerClicked.value !== '' && lastCardFlipped.value !== '') {
-                    handlePlayerInput();
-                }
-            })
-        });
-        
-        return {
-            score,
-            gameState,
-            lastPlayerClicked,
-            setLastCardFlipped,
-            setContinueGameLoop,
-            setGameStarted,
-        };
-    },
+// Setters 
+const setContinueGameLoop = (value) => {
+    gameStore.gameState.continueGameLoop = value;
+    console.log('continueGameLoop: ', gameStore.gameState.continueGameLoop);
 }
 
+const setLastCardFlipped = (value) => {
+    gameStore.lastCardFlipped = value;
+    console.log('lastCardFlipped: ', gameStore.lastCardFlipped);
+}
+
+onMounted(() => {
+    window.addEventListener('keyup', (event) => {
+        if (event.code === 'Space') {
+            // alert('How to Play... Will be added later');
+            if (gameStore.gameState.gameStarted === false) {
+                gameStore.gameState.gameStarted = true;
+                gameStore.gameState.continueGameLoop = true;
+            }
+        } else if (event.code === gameStore.playerActionButtons.playerOneKey) {
+            gameStore.lastPlayerClicked === '' ? gameStore.lastPlayerClicked = 'player1' : '';
+        } else if (event.code === gameStore.playerActionButtons.playerTwoKey) {
+            gameStore.lastPlayerClicked === '' ? gameStore.lastPlayerClicked = 'player2' : '';
+        }
+
+        if(gameStore.lastPlayerClicked !== '' && gameStore.lastCardFlipped !== '') {
+            gameStore.handlePlayerInput();
+        }
+    })
+});
 </script>
