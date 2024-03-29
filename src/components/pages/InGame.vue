@@ -4,23 +4,19 @@
             <div id="left-column">
                 <score-board />
             </div>
-            <!-- <div class="break-v"></div> -->
             <div id="center-column">
                 <deck-area 
-                    v-bind="gameStore.gameState"
                     @set-continue-game-loop="setContinueGameLoop" 
                     @set-last-card-flipped="setLastCardFlipped" 
                 />
             </div>
             <div id="right-column">
-                <!-- <score-board v-bind="score" /> -->
             </div>
         </div>
         <div id="start-game-text" v-if="!gameStore.gameState.gameStarted">
             Press Space to Start
         </div>
     </div>
-    <!-- <input type="button" @click="inc"/> -->
 </template>
 
 <script setup>
@@ -35,12 +31,10 @@ const gameStore = useGameStore()
 // Setters 
 const setContinueGameLoop = (value) => {
     gameStore.gameState.continueGameLoop = value;
-    console.log('continueGameLoop: ', gameStore.gameState.continueGameLoop);
 }
 
 const setLastCardFlipped = (value) => {
     gameStore.lastCardFlipped = value;
-    console.log('lastCardFlipped: ', gameStore.lastCardFlipped);
 }
 
 onMounted(() => {
@@ -49,7 +43,7 @@ onMounted(() => {
             // alert('How to Play... Will be added later');
             if (gameStore.gameState.gameStarted === false) {
                 gameStore.gameState.gameStarted = true;
-                gameStore.gameState.continueGameLoop = true;
+                // gameStore.gameState.continueGameLoop = true;
             }
         } else if (event.code === gameStore.playerActionButtons.playerOneKey) {
             gameStore.lastPlayerClicked === '' ? gameStore.lastPlayerClicked = 'player1' : '';
