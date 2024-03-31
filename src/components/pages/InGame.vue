@@ -5,10 +5,7 @@
                 <score-board />
             </div>
             <div id="center-column">
-                <deck-area 
-                    @set-continue-game-loop="setContinueGameLoop" 
-                    @set-last-card-flipped="setLastCardFlipped" 
-                />
+                <deck-area />
             </div>
             <div id="right-column">
             </div>
@@ -27,15 +24,6 @@ import { useGameStore } from '@/assets/stores/game';
 
 import { ref, onMounted, computed, watch } from 'vue';
 const gameStore = useGameStore()
-
-// Setters 
-const setContinueGameLoop = (value) => {
-    gameStore.gameState.continueGameLoop = value;
-}
-
-const setLastCardFlipped = (value) => {
-    gameStore.lastCardFlipped = value;
-}
 
 onMounted(() => {
     window.addEventListener('keyup', (event) => {

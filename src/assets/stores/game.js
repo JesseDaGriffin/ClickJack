@@ -1,8 +1,12 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
+import { useDeckStore } from '@/assets/stores/deck';
+
 export const useGameStore = defineStore('game', () => {
     // State
+    const deckStore = useDeckStore();
+    
     const score = ref({
         player1: 0,
         player2: 0
@@ -10,7 +14,8 @@ export const useGameStore = defineStore('game', () => {
 
     const gameState = ref({
         gameStarted: false,
-        continueGameLoop: false
+        continueGameLoop: false,
+        gameOver: false
     });
 
     const playerActionButtons = ref({
@@ -37,7 +42,12 @@ export const useGameStore = defineStore('game', () => {
             this.lastCardFlipped = '';
 
             alert(playerScored + " scored a point!")
-            this.gameState.continueGameLoop = true;
+
+            if(deckStore.gameDeck.length === 0) {
+                this.gameState.gameOver = true;
+            } else {
+                this.gameState.continueGameLoop = true;
+            }
         } else {
             this.lastPlayerClicked = '';
         }
