@@ -77,7 +77,11 @@ const flipNextCard = () => {
         gameStore.gameState.continueGameLoop = false;
     } else {
         setTimeout(() => {
-            gameStore.gameState.continueGameLoop = true;
+            if(deckStore.deckCount > 0) {
+                gameStore.gameState.continueGameLoop = true;
+            } else {
+                gameStore.gameState.gameOver = true;
+            }
         }, 1000);
     }
 }
