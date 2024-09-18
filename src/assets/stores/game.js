@@ -30,11 +30,11 @@ export const useGameStore = defineStore('game', () => {
     // Actions
     function handlePlayerInput () {
         const isJack = lastCardFlipped.value.includes('jack');
-        const player = lastPlayerClicked === 'player1' ? 'player1' : 'player2';
+        const player = lastPlayerClicked.value === 'player1' ? 'player1' : 'player2';
         const scoreChange = isJack ? 1 : -1;
         
         gameState.value.continueGameLoop = false;
-
+        
         score.value[player] += scoreChange;
         
         if(deckStore.gameDeck.length === 0) {
