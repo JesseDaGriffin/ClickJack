@@ -6,7 +6,9 @@ Game Features:
 
     In Game:
         ✔ Add starting text to start game with spacebar @done(24-03-15 18:55)
-        ☐ Add controls to screen
+        ✔ Add negative points for pressing button when not jack @done(24-09-17 19:45)
         ☐ Add remaining cards in deck and remaining jack
-        ☐ Add negative points for pressing button when not jack
+        ☐ Add controls to screen
+        ☐ Add way to restart game
         ☐ Remove pop up when someone scores an replace with confetti (vue confetti)
+        ☐ Replace game over pop up

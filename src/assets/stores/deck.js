@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useDeckStore = defineStore('deck', () => {
     // State
-    const useDevDeck = true;
+    const useDevDeck = false;
     const gameDeck = ref([]);
 
     const numberOfDecks = 1;
@@ -12,7 +12,7 @@ export const useDeckStore = defineStore('deck', () => {
     function createDeck() {
         if(useDevDeck) {
             // Dev deck
-            this.gameDeck = [
+            gameDeck.value = [
                 'ace_of_hearts',
                 'ace_of_spades',
                 'jack_of_diamonds2',
@@ -21,7 +21,7 @@ export const useDeckStore = defineStore('deck', () => {
             ];
 
         } else {
-            this.gameDeck = [
+            gameDeck.value = [
                 '2_of_clubs',
                 '2_of_diamonds',
                 '2_of_hearts',
@@ -79,9 +79,9 @@ export const useDeckStore = defineStore('deck', () => {
 
     
         // Add more decks
-        let deckCopy = this.gameDeck.slice();
+        let deckCopy = gameDeck.value.slice();
         for(let i = 1; i < numberOfDecks; i++) {
-            this.gameDeck = this.gameDeck.concat(deckCopy);
+            gameDeck.value = gameDeck.value.concat(deckCopy);
         }
     }
 

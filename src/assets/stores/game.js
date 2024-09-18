@@ -28,29 +28,25 @@ export const useGameStore = defineStore('game', () => {
     const lastPlayerClicked = ref('');
 
     // Actions
-    function handlePlayerInput() {
-        let playerScored = "";
-        if(this.lastCardFlipped.includes('jack')) {
-            if(this.lastPlayerClicked === 'player1') {
-                playerScored = "Player 1";
-                this.score.player1 = this.score.player1 + 1;
-            } else if(this.lastPlayerClicked === 'player2') {
-                playerScored = "Player 2";
-                this.score.player2 = this.score.player2 + 1;
-            }
-            this.lastPlayerClicked = '';
-            this.lastCardFlipped = '';
+    function handlePlayerInput () {
+        const isJack = lastCardFlipped.value.includes('jack');
+        const player = lastPlayerClicked === 'player1' ? 'player1' : 'player2';
+        const scoreChange = isJack ? 1 : -1;
+        
+        gameState.value.continueGameLoop = false;
 
-            alert(playerScored + " scored a point!")
-
-            if(deckStore.gameDeck.length === 0) {
-                this.gameState.gameOver = true;
-            } else {
-                this.gameState.continueGameLoop = true;
-            }
-        } else {
-            this.lastPlayerClicked = '';
+        score.value[player] += scoreChange;
+        
+        if(deckStore.gameDeck.length === 0) {
+            gameState.value.gameOver = true;
+        } else if(isJack) {
+            gameState.value.continueGameLoop = true;
         }
+        
+        alert(`${player === 'player1' ? 'Player 1' : 'Player 2'} ${isJack ? 'scored' : 'lost'} a point!`);
+
+        lastPlayerClicked.value = '';
+        lastCardFlipped.value = '';
     }
 
     // Getters / Computed Properties
