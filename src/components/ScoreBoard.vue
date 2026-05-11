@@ -1,7 +1,7 @@
 <template>
-    <div id="scoreboard">
-        <h2 id="scoreboard-title">Score</h2>
-        <div id="scoreboard-grid">
+    <div class="scoreboard">
+        <h2 class="scoreboard-title">Score</h2>
+        <div class="scoreboard-grid">
             <div>Player 1</div>
             <div>Player 2</div>
             <div class="score-count" :class="{

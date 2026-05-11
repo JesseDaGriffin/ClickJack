@@ -16,12 +16,14 @@ export function useSound() {
     const playFart = () => playSound('fart-sound', 0.5);
     const playWin = () => playSound('win-game');
     const playTie = () => playSound('tie-game', 0, 2);
+    const playFlip = (rate = 1) => playSound('flip-card', 0, rate);
 
     return {
         playSuccess,
         playFart,
         playWin,
         playTie,
+        playFlip,
         playSound
     };
 }

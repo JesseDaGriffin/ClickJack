@@ -19,7 +19,8 @@ export const useGameStore = defineStore('game', () => {
         continueGameLoop: false,
         gameOver: false,
         gamePaused: false,
-        pauseForAnimation: false
+        pauseForAnimation: false,
+        fastForward: false
     });
 
     const scoreStatus = ref({
@@ -41,7 +42,7 @@ export const useGameStore = defineStore('game', () => {
 
     // Actions
     function handlePlayerInput () {
-        if (gameState.value.pauseForAnimation) return;
+        if (gameState.value.pauseForAnimation || gameState.value.fastForward) return;
 
         const isJack = lastCardFlipped.value.includes('jack');
         const player = lastPlayerClicked.value === 'player1' ? 'player1' : 'player2';
@@ -96,7 +97,8 @@ export const useGameStore = defineStore('game', () => {
             gameStarted: false,
             continueGameLoop: false,
             gameOver: false,
-            gamePaused: false
+            gamePaused: false,
+            fastForward: false
         };
         lastCardFlipped.value = '';
         lastPlayerClicked.value = '';

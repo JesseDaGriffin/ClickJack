@@ -10,6 +10,7 @@
                 <deck-area />
             </div>
             <div id="right-column">
+                <stats-board />
             </div>
         </div>
         
@@ -60,6 +61,7 @@
 <script setup>
 import ScoreBoard from '../ScoreBoard.vue';
 import DeckArea from '../DeckArea.vue';
+import StatsBoard from '../StatsBoard.vue';
 
 import { useGameStore } from '@/assets/stores/game';
 import { useSound } from '@/composables/useSound';

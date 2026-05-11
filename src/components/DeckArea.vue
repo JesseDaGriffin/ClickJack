@@ -12,9 +12,11 @@ import { ref, onMounted, computed, watch } from 'vue';
 
 import { useGameStore } from '@/assets/stores/game';
 import { useDeckStore } from '@/assets/stores/deck';
+import { useSound } from '@/composables/useSound';
     
 const gameStore = useGameStore();
 const deckStore = useDeckStore();
+const sound = useSound();
 
 watch(() => gameStore.gameState.gameStarted, (isGameStarted) => {
     if(isGameStarted) {
@@ -53,6 +55,12 @@ const flipNextCard = () => {
     // Set last card flipped
     gameStore.lastCardFlipped = randomCard;
 
+    // Check fast forward
+    const jacksLeft = deckStore.gameDeck.filter(c => c.includes('jack')).length;
+    if (jacksLeft === 0 && !randomCard.includes('jack')) {
+        gameStore.gameState.fastForward = true;
+    }
+
     // Flip card
     const newCard = document.getElementById("remaining-cards").cloneNode();
     newCard.src = '../src/assets/cardBack.png';
@@ -62,8 +70,13 @@ const flipNextCard = () => {
     document.getElementById("deck-area").appendChild(newCard);
     
     // Card flip speed
-    const speed = Math.floor(Math.random() * 300) + 50;
-    newCard.style["-webkit-animation-duration"] = `${speed / 500}s`;
+    const isFF = gameStore.gameState.fastForward;
+    const speed = isFF ? 50 : Math.floor(Math.random() * 300) + 50;
+    
+    const playbackRate = 200 / speed;
+    sound.playFlip(playbackRate);
+    
+    newCard.style["-webkit-animation-duration"] = isFF ? '0.1s' : `${speed / 500}s`;
     newCard.classList.add('move-img');
     setTimeout(() => {
         newCard.src = `../src/assets/cardFaces/${randomCard}.png`;
@@ -86,7 +99,7 @@ const flipNextCard = () => {
             } else {
                 gameStore.gameState.gameOver = true;
             }
-        }, 1000);
+        }, isFF ? 100 : 1000);
     }
 }
 </script>

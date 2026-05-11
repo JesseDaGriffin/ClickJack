@@ -129,10 +129,13 @@ body {
 }
 #game-board #right-column {
     width: 33%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
 }
 
 /* Scoreboard */
-#scoreboard {
+.scoreboard {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -145,12 +148,12 @@ body {
     background-color: burlywood;
 }
 
-#scoreboard #scoreboard-title {
+.scoreboard .scoreboard-title {
     width: 100%;
     text-align: center;
 }
 
-#scoreboard #scoreboard-grid {
+.scoreboard .scoreboard-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 4fr;
@@ -158,11 +161,11 @@ body {
     row-gap: 1rem;
     margin-bottom: 3rem;
 }
-#scoreboard #scoreboard-grid div {
+.scoreboard .scoreboard-grid div {
     text-align: center;
 }
 
-#scoreboard #scoreboard-grid .score-count {
+.scoreboard .scoreboard-grid .score-count {
     display: flex;
     justify-content: center;
     align-items: center;
