@@ -64,12 +64,14 @@ import DeckArea from '../DeckArea.vue';
 import StatsBoard from '../StatsBoard.vue';
 
 import { useGameStore } from '@/assets/stores/game';
+import { useDeckStore } from '@/assets/stores/deck';
 import { useSound } from '@/composables/useSound';
 
 import { ref, onMounted, onUnmounted, computed, watch, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 
 const gameStore = useGameStore();
+const deckStore = useDeckStore();
 const sound = useSound();
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -126,6 +128,7 @@ const handleKeyup = (event) => {
 
 onMounted(() => {
     window.addEventListener('keyup', handleKeyup);
+    deckStore.createDeck();
 });
 
 onUnmounted(() => {

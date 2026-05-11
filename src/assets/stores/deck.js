@@ -83,6 +83,13 @@ export const useDeckStore = defineStore('deck', () => {
         for(let i = 1; i < numberOfDecks; i++) {
             gameDeck.value = gameDeck.value.concat(deckCopy);
         }
+
+        // Preload images to prevent animation flash on production
+        const uniqueCards = new Set(gameDeck.value);
+        uniqueCards.forEach(card => {
+            const img = new Image();
+            img.src = `/cardFaces/${card}.png`;
+        });
     }
 
     // Getters / Computed Properties
