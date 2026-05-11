@@ -28,7 +28,7 @@
         </div>
 
         <!-- Menu Modal -->
-        <div class="modal-overlay" v-if="gameStore.gameState.gamePaused">
+        <div class="modal-overlay" v-if="gameStore.gameState.gamePaused && !gameStore.gameState.gameOver">
             <div class="modal-content">
                 <h2>Game Paused</h2>
                 <button class="modal-btn" @click="resumeGame">Resume</button>
@@ -40,6 +40,20 @@
                 </div>
             </div>
         </div>
+
+        <!-- Game Over Modal -->
+        <div class="modal-overlay" v-if="gameStore.gameState.gameOver">
+            <div class="modal-content">
+                <h2>Game Over!</h2>
+                <div style="font-size: 2rem; margin: 1rem 0; font-weight: bold;">
+                    <div v-if="gameStore.score.player1 > gameStore.score.player2" style="color: green;">Player 1 Wins!</div>
+                    <div v-else-if="gameStore.score.player2 > gameStore.score.player1" style="color: green;">Player 2 Wins!</div>
+                    <div v-else style="color: red;">It's a Tie!</div>
+                </div>
+                <button class="modal-btn" @click="restartGame">Play Again</button>
+                <button class="modal-btn" @click="exitGame">Exit Game</button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -48,12 +62,32 @@ import ScoreBoard from '../ScoreBoard.vue';
 import DeckArea from '../DeckArea.vue';
 
 import { useGameStore } from '@/assets/stores/game';
+import { useSound } from '@/composables/useSound';
 
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 
-const gameStore = useGameStore()
+const gameStore = useGameStore();
+const sound = useSound();
 const router = useRouter();
+const { proxy } = getCurrentInstance();
+
+watch(() => gameStore.gameState.gameOver, (isOver) => {
+    if (isOver) {
+        if (gameStore.score.player1 === gameStore.score.player2) {
+            sound.playTie();
+        } else {
+            sound.playWin();
+            if (proxy && proxy.$confetti) {
+                proxy.$confetti.start();
+            }
+        }
+    } else {
+        if (proxy && proxy.$confetti) {
+            proxy.$confetti.stop();
+        }
+    }
+});
 
 const resumeGame = () => {
     gameStore.gameState.gamePaused = false;

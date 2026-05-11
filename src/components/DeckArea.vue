@@ -22,11 +22,7 @@ watch(() => gameStore.gameState.gameStarted, (isGameStarted) => {
     }
 });
 
-watch(() => gameStore.gameState.gameOver, (isGameOver) => {
-    if(isGameOver) {
-        alert('Game Over!');
-    }
-});
+
 
 watch(() => gameStore.gameState.continueGameLoop, (continueLoop) => {
     if(continueLoop && deckStore.deckCount > 0 && !gameStore.gameState.gamePaused) {
