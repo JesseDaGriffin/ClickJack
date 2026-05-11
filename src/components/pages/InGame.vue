@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div id="game-board" :class="{ blur: !gameStore.gameState.gameStarted || gameStore.gameState.gamePaused }" >
+        <div id="game-board" :class="{ 
+            blur: !gameStore.gameState.gameStarted || gameStore.gameState.gamePaused
+        }" >
             <div id="left-column">
                 <score-board />
             </div>
@@ -72,17 +74,15 @@ const handleKeyup = (event) => {
             gameStore.gameState.gameStarted = true;
         }
     } else if (event.code === 'Escape') {
-        if (gameStore.gameState.gameStarted && !gameStore.gameState.gameOver) {
+        if (gameStore.gameState.gameStarted) {
             gameStore.gameState.gamePaused = !gameStore.gameState.gamePaused;
         }
-    } else if (!gameStore.gameState.gamePaused) {
+    } else if (!gameStore.gameState.gamePaused && gameStore.lastCardFlipped !== '') {
         if (event.code === gameStore.playerActionButtons.playerOneKey) {
-            gameStore.lastPlayerClicked === '' ? gameStore.lastPlayerClicked = 'player1' : '';
+            gameStore.lastPlayerClicked = 'player1';
+            gameStore.handlePlayerInput();
         } else if (event.code === gameStore.playerActionButtons.playerTwoKey) {
-            gameStore.lastPlayerClicked === '' ? gameStore.lastPlayerClicked = 'player2' : '';
-        }
-
-        if(gameStore.lastPlayerClicked !== '' && gameStore.lastCardFlipped !== '') {
+            gameStore.lastPlayerClicked = 'player2';
             gameStore.handlePlayerInput();
         }
     }

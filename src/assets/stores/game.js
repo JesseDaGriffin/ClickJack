@@ -2,10 +2,12 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 import { useDeckStore } from '@/assets/stores/deck';
+import { useSound } from '@/composables/useSound';
 
 export const useGameStore = defineStore('game', () => {
     // State
     const deckStore = useDeckStore();
+    const sound = useSound();
     
     const score = ref({
         player1: 0,
@@ -16,7 +18,13 @@ export const useGameStore = defineStore('game', () => {
         gameStarted: false,
         continueGameLoop: false,
         gameOver: false,
-        gamePaused: false
+        gamePaused: false,
+        pauseForAnimation: false
+    });
+
+    const scoreStatus = ref({
+        status: '',
+        player: ''
     });
 
     const playerActionButtons = ref({
@@ -28,26 +36,55 @@ export const useGameStore = defineStore('game', () => {
 
     const lastPlayerClicked = ref('');
 
+    let animationTimeout1 = null;
+    let animationTimeout2 = null;
+
     // Actions
     function handlePlayerInput () {
+        if (gameState.value.pauseForAnimation) return;
+
         const isJack = lastCardFlipped.value.includes('jack');
         const player = lastPlayerClicked.value === 'player1' ? 'player1' : 'player2';
         const scoreChange = isJack ? 1 : -1;
         
+        if (isJack) {
+            lastCardFlipped.value = 'claimed';
+            sound.playSuccess();
+        } else {
+            sound.playFart();
+        }
+        
         gameState.value.continueGameLoop = false;
+        gameState.value.pauseForAnimation = true;
         
         score.value[player] += scoreChange;
         
-        if(deckStore.gameDeck.length === 0) {
-            gameState.value.gameOver = true;
-        } else if(isJack) {
-            gameState.value.continueGameLoop = true;
-        }
-        
-        alert(`${player === 'player1' ? 'Player 1' : 'Player 2'} ${isJack ? 'scored' : 'lost'} a point!`);
+        scoreStatus.value = {
+            status: isJack ? 'scored' : 'lost',
+            player: player
+        };
 
+        // Clear immediately to prevent stacking inputs from the same keydown
         lastPlayerClicked.value = '';
-        lastCardFlipped.value = '';
+
+        if (animationTimeout1) clearTimeout(animationTimeout1);
+        if (animationTimeout2) clearTimeout(animationTimeout2);
+
+        animationTimeout1 = setTimeout(() => {
+            scoreStatus.value = { status: '', player: '' };
+        }, 1000);
+
+        animationTimeout2 = setTimeout(() => {
+            gameState.value.pauseForAnimation = false;
+
+            if(deckStore.gameDeck.length === 0) {
+                gameState.value.gameOver = true;
+            } else if (!gameState.value.gamePaused) {
+                gameState.value.continueGameLoop = true;
+            }
+            
+            lastCardFlipped.value = '';
+        }, 2000);
     }
 
     // Getters / Computed Properties
@@ -85,6 +122,7 @@ export const useGameStore = defineStore('game', () => {
     return { 
         score, 
         gameState, 
+        scoreStatus,
         playerActionButtons,  
         lastCardFlipped,
         lastPlayerClicked,

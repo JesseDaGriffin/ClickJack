@@ -84,7 +84,7 @@ const flipNextCard = () => {
     } else {
         setTimeout(() => {
             if(deckStore.deckCount > 0) {
-                if(!gameStore.gameState.gamePaused) {
+                if(!gameStore.gameState.gamePaused && !gameStore.gameState.pauseForAnimation) {
                     gameStore.gameState.continueGameLoop = true;
                 }
             } else {
