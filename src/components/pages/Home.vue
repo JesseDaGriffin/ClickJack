@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="included-text">
-            Icons by <a target="_blank" href="https://icons8.com">Icons8</a>
+            Icons by <a target="_blank" href="https://icons8.com">Icons8</a> | Sounds by <a target="_blank" href="https://pixabay.com/">Pixabay</a>
         </div>
     </div>
 </template>
