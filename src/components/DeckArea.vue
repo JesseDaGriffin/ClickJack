@@ -1,80 +1,105 @@
 <template>
     <div id="deck-area">
-        <div id="flipped-position">
-            <img id="deck" src="../assets/cardBack.png"/>
-        </div>
-        <div id="deck-position" @click="flipNextCard()">
-            <img id="deck" src="../assets/cardBack.png"/>
+        <div id="flipped-position"></div>
+        <div id="deck-position">
+            <img id="remaining-cards" class="deck" src="../assets/cardBack.png"/>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { ref, onMounted, computed, watch } from 'vue';
-    
-    const deck = ref([]);
+import { ref, onMounted, computed, watch } from 'vue';
 
-    const flipNextCard = () => {
-        console.log(deck.value);
-        const randomIndex = Math.floor(Math.random() * deck.value.length);
-        const randomCard = deck.value[randomIndex];
-        alert(randomCard);
+import { useGameStore } from '@/assets/stores/game';
+import { useDeckStore } from '@/assets/stores/deck';
+import { useSound } from '@/composables/useSound';
+    
+const gameStore = useGameStore();
+const deckStore = useDeckStore();
+const sound = useSound();
+
+watch(() => gameStore.gameState.gameStarted, (isGameStarted) => {
+    if(isGameStarted) {
+        startGame();
+    }
+});
+
+
+
+watch(() => gameStore.gameState.continueGameLoop, (continueLoop) => {
+    if(continueLoop && deckStore.deckCount > 0 && !gameStore.gameState.gamePaused) {
+        flipNextCard();
+    }
+});
+
+watch(() => gameStore.gameState.gamePaused, (isPaused) => {
+    if(!isPaused && gameStore.gameState.gameStarted && !gameStore.gameState.gameOver && !gameStore.lastCardFlipped.includes('jack')) {
+        gameStore.gameState.continueGameLoop = true;
+    }
+});
+
+const startGame = () => {
+    deckStore.createDeck();
+    gameStore.gameState.continueGameLoop = true;
+}
+
+const flipNextCard = () => {
+    gameStore.gameState.continueGameLoop = false;
+    // Get next card
+    const randomIndex = Math.floor(Math.random() * deckStore.deckCount);
+    const randomCard = deckStore.gameDeck[randomIndex];
+
+    // Remove card from deck
+    deckStore.gameDeck.splice(randomIndex, 1)
+
+    // Set last card flipped
+    gameStore.lastCardFlipped = randomCard;
+
+    // Check fast forward
+    const jacksLeft = deckStore.gameDeck.filter(c => c.includes('jack')).length;
+    if (jacksLeft === 0 && !randomCard.includes('jack')) {
+        gameStore.gameState.fastForward = true;
     }
 
-    onMounted(() => {
-        deck.value = [
-            '2_of_clubs',
-            '2_of_diamonds',
-            '2_of_hearts',
-            '2_of_spades',
-            '3_of_clubs',
-            '3_of_diamonds',
-            '3_of_hearts',
-            '3_of_spades',
-            '4_of_clubs',
-            '4_of_diamonds',
-            '4_of_hearts',
-            '4_of_spades',
-            '5_of_clubs',
-            '5_of_diamonds',
-            '5_of_hearts',
-            '5_of_spades',
-            '6_of_clubs',
-            '6_of_diamonds',
-            '6_of_hearts',
-            '6_of_spades',
-            '7_of_clubs',
-            '7_of_diamonds',
-            '7_of_hearts',
-            '7_of_spades',
-            '8_of_clubs',
-            '8_of_diamonds',
-            '8_of_hearts',
-            '8_of_spades',
-            '9_of_clubs',
-            '9_of_diamonds',
-            '9_of_hearts',
-            '9_of_spades',
-            '10_of_clubs',
-            '10_of_diamonds',
-            '10_of_hearts',
-            '10_of_spades',
-            'ace_of_clubs',
-            'ace_of_diamonds',
-            'ace_of_hearts',
-            'ace_of_spades',
-            'jack_of_clubs2',
-            'jack_of_diamonds2',
-            'jack_of_hearts2',
-            'jack_of_spades2',
-            'king_of_clubs2',
-            'king_of_diamonds2',
-            'king_of_hearts2',
-            'king_of_spades2',
-            'queen_of_clubs2',
-            'queen_of_diamonds2',
-            'queen_of_hearts2',
-            'queen_of_spades2'
-        ];
-    });
+    // Flip card
+    const newCard = document.getElementById("remaining-cards").cloneNode();
+    newCard.src = '../src/assets/cardBack.png';
+    newCard.id = randomCard;
+    newCard.className = 'flipped-card';
+    
+    document.getElementById("deck-area").appendChild(newCard);
+    
+    // Card flip speed
+    const isFF = gameStore.gameState.fastForward;
+    const speed = isFF ? 50 : Math.floor(Math.random() * 300) + 50;
+    
+    const playbackRate = 200 / speed;
+    sound.playFlip(playbackRate);
+    
+    newCard.style["-webkit-animation-duration"] = isFF ? '0.1s' : `${speed / 500}s`;
+    newCard.classList.add('move-img');
+    setTimeout(() => {
+        newCard.src = `../src/assets/cardFaces/${randomCard}.png`;
+    }, speed);
+
+    // Remove card back if last card in deck
+    if(deckStore.deckCount === 0) {
+        document.getElementById("remaining-cards").remove();
+    }
+
+    // Stop game loop if card is a jack
+    if(randomCard.includes('jack')) {
+        gameStore.gameState.continueGameLoop = false;
+    } else {
+        setTimeout(() => {
+            if(deckStore.deckCount > 0) {
+                if(!gameStore.gameState.gamePaused && !gameStore.gameState.pauseForAnimation) {
+                    gameStore.gameState.continueGameLoop = true;
+                }
+            } else {
+                gameStore.gameState.gameOver = true;
+            }
+        }, isFF ? 100 : 1000);
+    }
+}
 </script>
