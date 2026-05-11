@@ -15,7 +15,8 @@ export const useGameStore = defineStore('game', () => {
     const gameState = ref({
         gameStarted: false,
         continueGameLoop: false,
-        gameOver: false
+        gameOver: false,
+        gamePaused: false
     });
 
     const playerActionButtons = ref({
@@ -52,12 +53,42 @@ export const useGameStore = defineStore('game', () => {
     // Getters / Computed Properties
 
 
+    function resetGame() {
+        score.value = { player1: 0, player2: 0 };
+        gameState.value = {
+            gameStarted: false,
+            continueGameLoop: false,
+            gameOver: false,
+            gamePaused: false
+        };
+        lastCardFlipped.value = '';
+        lastPlayerClicked.value = '';
+
+        const deckArea = document.getElementById('deck-area');
+        if (deckArea) {
+            const flippedCards = deckArea.querySelectorAll('.flipped-card');
+            flippedCards.forEach(card => card.remove());
+            
+            if (!document.getElementById('remaining-cards')) {
+                const img = document.createElement('img');
+                img.id = 'remaining-cards';
+                img.className = 'deck';
+                img.src = '../src/assets/cardBack.png';
+                const deckPos = document.getElementById('deck-position');
+                if(deckPos) {
+                    deckPos.appendChild(img);
+                }
+            }
+        }
+    }
+
     return { 
         score, 
         gameState, 
         playerActionButtons,  
         lastCardFlipped,
         lastPlayerClicked,
-        handlePlayerInput
+        handlePlayerInput,
+        resetGame
     }
 })

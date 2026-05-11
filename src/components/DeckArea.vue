@@ -29,8 +29,14 @@ watch(() => gameStore.gameState.gameOver, (isGameOver) => {
 });
 
 watch(() => gameStore.gameState.continueGameLoop, (continueLoop) => {
-    if(continueLoop && deckStore.deckCount > 0) {
+    if(continueLoop && deckStore.deckCount > 0 && !gameStore.gameState.gamePaused) {
         flipNextCard();
+    }
+});
+
+watch(() => gameStore.gameState.gamePaused, (isPaused) => {
+    if(!isPaused && gameStore.gameState.gameStarted && !gameStore.gameState.gameOver && !gameStore.lastCardFlipped.includes('jack')) {
+        gameStore.gameState.continueGameLoop = true;
     }
 });
 
@@ -78,7 +84,9 @@ const flipNextCard = () => {
     } else {
         setTimeout(() => {
             if(deckStore.deckCount > 0) {
-                gameStore.gameState.continueGameLoop = true;
+                if(!gameStore.gameState.gamePaused) {
+                    gameStore.gameState.continueGameLoop = true;
+                }
             } else {
                 gameStore.gameState.gameOver = true;
             }
