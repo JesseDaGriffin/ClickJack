@@ -9,8 +9,8 @@ Game Features:
         ✔ Add starting text to start game with spacebar @done(24-03-15 18:55)
         ✔ Add negative points for pressing button when not jack @done(24-09-17 19:45)
         ✔ The first time you enter a game, a tutorial pop up appears with controls and rules.   
-        ☐ Add remaining cards in deck and remaining jack
+        ✔ Add remaining cards in deck and remaining jack
         ✔ Add controls to screen
         ✔ Add way to restart game
-        ☐ Remove pop up when someone scores an replace with confetti (vue confetti)
-        ☐ Replace game over pop up
+        ✔ Remove pop up when someone scores and replace with confetti (vue confetti)
+        ✔ Replace game over pop up

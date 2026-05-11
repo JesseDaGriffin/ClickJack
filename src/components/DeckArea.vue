@@ -63,7 +63,6 @@ const flipNextCard = () => {
 
     // Flip card
     const newCard = document.getElementById("remaining-cards").cloneNode();
-    newCard.src = '../src/assets/cardBack.png';
     newCard.id = randomCard;
     newCard.className = 'flipped-card';
     
@@ -79,7 +78,7 @@ const flipNextCard = () => {
     newCard.style["-webkit-animation-duration"] = isFF ? '0.1s' : `${speed / 500}s`;
     newCard.classList.add('move-img');
     setTimeout(() => {
-        newCard.src = `../src/assets/cardFaces/${randomCard}.png`;
+        newCard.src = `/cardFaces/${randomCard}.png`;
     }, speed);
 
     // Remove card back if last card in deck
